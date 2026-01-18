@@ -196,14 +196,24 @@
             document.getElementById('paymentModal').style.display = 'flex';
         }
 
-        function startSecureTransition() {
-            document.getElementById('step-confirm').style.display = 'none';
-            document.getElementById('step-loading').style.display = 'block';
-            // 模拟跳转到支付链接 (Make.com 接管)
-            setTimeout(() => { 
-                window.location.href = "https://your-make-webhook.com?id=" + currentBookId; 
-            }, 1200);
-        }
+function startSecureTransition() {
+    // 1. 先展示“建立加密连接”的动画
+    document.getElementById('step-confirm').style.display = 'none';
+    document.getElementById('step-loading').style.display = 'block';
+
+    // 2. 获取当前用户点击的书籍 ID (比如 b001)
+    // 注意：这里的 currentBookId 是你在 handlePayClick 函数里已经存好的
+    const bookId = currentBookId; 
+
+    // 3. 拼接链接：在通用支付链接后面，强行挂上 ID
+    // Stripe 规定这个参数名必须叫 client_reference_id 才能被后端识别
+    const finalPaymentUrl = "https://buy.stripe.com/你的通用链接ID?client_reference_id=" + bookId;
+
+    // 4. 跳转
+    setTimeout(() => {
+        window.location.href = finalPaymentUrl;
+    }, 1600);
+}
 
         function handleBoost(id, title) {
             const card = document.getElementById('card-' + id);
