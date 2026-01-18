@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${book.title} AI Audiobook | Community Knowledge Unlock</title>
+    <meta name="description" content="Join the Infinity Audiobook initiative for '${book.title}'. Learn key insights with AI-powered narration. Current progress: ${percent}%. Support the community to unlock.">
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Book",
+      "name": "${book.title}",
+      "description": "AI-generated collective knowledge version of ${book.title}.",
+      "image": "${book.img}",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.99",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/PreOrder"
+      }
+    }
+    </script>
+
+    <style>
+        :root { --primary: #00d2ff; --bg: #0a0a0c; --card: #16161a; --text: #eeeeee; --text-dim: #888; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .back-nav { margin-bottom: 30px; }
+        .back-nav a { color: var(--primary); text-decoration: none; font-size: 0.9rem; }
+        
+        /* 布局 */
+        .book-hero { display: grid; grid-template-columns: 250px 1fr; gap: 40px; margin-bottom: 50px; }
+        @media (max-width: 600px) { .book-hero { grid-template-columns: 1fr; text-align: center; } .cover { margin: 0 auto; } }
+        
+        .cover { width: 250px; height: 375px; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); object-fit: cover; }
+        .info h1 { color: var(--primary); font-size: 2.2rem; margin: 0 0 10px 0; }
+        .badge { display: inline-block; padding: 4px 12px; background: rgba(0,210,255,0.1); color: var(--primary); border-radius: 20px; font-size: 0.8rem; margin-bottom: 20px; }
+        
+        /* 进度条 */
+        .progress-box { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid #333; margin: 20px 0; }
+        .bar-bg { background: #222; height: 12px; border-radius: 6px; overflow: hidden; margin: 10px 0; }
+        .bar-fill { background: linear-gradient(90deg, #00d2ff, #3a7bd5); height: 100%; width: ${percent}%; }
+        
+        /* 按钮 */
+        .btn-pay { background: var(--primary); color: #000; border: none; padding: 15px 30px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; }
+        
+        /* SEO 内容区 */
+        .content-section { margin-top: 40px; border-top: 1px solid #222; padding-top: 30px; }
+        .content-section h2 { color: var(--primary); font-size: 1.5rem; }
+        .content-section p { color: var(--text-dim); }
+        
+        .related-books { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 20px; }
+        .related-item { background: var(--card); padding: 10px; border-radius: 8px; font-size: 0.8rem; text-decoration: none; color: var(--text-dim); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="back-nav"><a href="/">← Back to Library</a></nav>
+
+        <main class="book-hero">
+            <img src="${book.img}" alt="${book.title} Cover" class="cover">
+            <div class="info">
+                <div class="badge">Collective Knowledge Node</div>
+                <h1>${book.title}</h1>
+                <p style="color:var(--text-dim)">Unlock the deep insights of this masterpiece through our community-powered AI audiobook initiative.</p>
+                
+                <div class="progress-box">
+                    <div style="display:flex; justify-content:space-between; font-size:0.9rem;">
+                        <span>Progress: <strong>${percent}%</strong></span>
+                        <span>Goal: ${book.target} Credits</span>
+                    </div>
+                    <div class="bar-bg"><div class="bar-fill"></div></div>
+                </div>
+
+                <button class="btn-pay" onclick="location.href='/pay?id=${book.id}'">Support with 100 Credits ($0.99)</button>
+            </div>
+        </main>
+
+        <section class="content-section">
+            <h2>About ${book.title} AI Audiobook</h2>
+            <p>
+                This version of <strong>${book.title}</strong> is part of the Infinity Audiobook collective knowledge project. 
+                Using advanced AI narration and text synthesis, we provide a high-quality audio experience 
+                that helps you absorb the core principles of the book in a cost-effective way.
+            </p>
+            <p>
+                By contributing 100 credits ($0.99), you are not just buying a file; you are joining a 
+                community of learners who share the cost of premium knowledge. Early supporters get 
+                <strong>instant access</strong> even before the project reaches its final goal.
+            </p>
+        </section>
+
+        <section class="content-section">
+            <h2>Other Trending Projects</h2>
+            <div class="related-books">
+                <a href="/book/b002" class="related-item">Naval Ravikant...</a>
+                <a href="/book/b003" class="related-item">Elon Musk Bio...</a>
+                <a href="/book/b004" class="related-item">Atomic Habits...</a>
+            </div>
+        </section>
+    </div>
+
+    <footer style="text-align: center; margin-top: 80px; color: #444; font-size: 0.8rem;">
+        &copy; 2026 Infinity Audiobook. <a href="/privacy.html" style="color:#666">Privacy</a>
+    </footer>
+</body>
+</html>
