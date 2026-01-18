@@ -197,22 +197,25 @@
         }
 
 function startSecureTransition() {
-    // 1. 先展示“建立加密连接”的动画
+    if (!currentBookId) {
+        alert("Session expired, please select a book again.");
+        return;
+    }
+    
+    // 点击后立即禁用按钮，防止重复提交订单
+    document.getElementById('final-btn').disabled = true;
+    document.getElementById('final-btn').innerText = "Redirecting...";
+
     document.getElementById('step-confirm').style.display = 'none';
     document.getElementById('step-loading').style.display = 'block';
 
-    // 2. 获取当前用户点击的书籍 ID (比如 b001)
-    // 注意：这里的 currentBookId 是你在 handlePayClick 函数里已经存好的
-    const bookId = currentBookId; 
+    // 建议：如果您的 PayPal 按钮是“立即购买”类型，这种拼接方式是标准的
+    const paypalButtonId = "您的真实ID"; // 这里填入 ID
+    const finalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=${paypalButtonId}&custom=${currentBookId}`;
 
-    // 3. 拼接链接：在通用支付链接后面，强行挂上 ID
-    // Stripe 规定这个参数名必须叫 client_reference_id 才能被后端识别
-    const finalPaymentUrl = "https://buy.stripe.com/你的通用链接ID?client_reference_id=" + bookId;
-
-    // 4. 跳转
     setTimeout(() => {
-        window.location.href = finalPaymentUrl;
-    }, 1600);
+        window.location.href = finalUrl;
+    }, 1200);
 }
 
         function handleBoost(id, title) {
