@@ -136,7 +136,7 @@
         async function loadBooks() {
             try {
                 // 替换为您部署后的 Cloudflare Worker URL
-                const response = await fetch('https://你的worker名字.workers.dev');
+                const response = await fetch('https://sparkling-recipe-6de6.infinityaudiobook.workers.dev/');
                 allBooks = await response.json();
                 render(); 
             } catch (e) {
