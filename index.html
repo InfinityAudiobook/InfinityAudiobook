@@ -21,13 +21,25 @@
             margin: 0; padding: 40px 20px;
         }
 
-        .header { text-align: center; margin-bottom: 50px; }
+        .header { text-align: center; margin-bottom: 30px; }
         .header h1 { color: var(--primary); letter-spacing: 2px; margin-bottom: 10px; }
+
+        /* TAB 样式优化 */
+        .tabs-nav {
+            display: flex; justify-content: center; gap: 10px; margin-bottom: 40px;
+        }
+        .tab-btn {
+            background: #1a1a1e; border: 1px solid #333; color: var(--text-dim);
+            padding: 10px 20px; border-radius: 30px; cursor: pointer; transition: 0.3s;
+        }
+        .tab-btn.active {
+            background: var(--primary); color: #000; border-color: var(--primary); font-weight: bold;
+        }
 
         .container {
             max-width: 1200px; margin: 0 auto;
             display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 25px; padding: 20px;
+            gap: 25px;
         }
 
         .book-card {
@@ -36,134 +48,132 @@
         }
         .book-card:hover { transform: translateY(-5px); border-color: var(--primary); }
 
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0px var(--primary); border-color: var(--primary); }
-            50% { box-shadow: 0 0 20px var(--primary); border-color: #fff; }
-            100% { box-shadow: 0 0 0px var(--primary); border-color: #2a2a2a; }
-        }
-        .boosting { animation: pulse-glow 0.8s ease-in-out; }
-
         .cover { width: 100px; height: 150px; border-radius: 8px; object-fit: cover; margin-right: 20px; }
+        
         .book-info { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .badge { font-size: 0.65rem; font-weight: bold; color: var(--primary); text-transform: uppercase; margin-bottom: 8px; }
-        h3 { font-size: 1.1rem; margin: 0 0 12px 0; line-height: 1.3; }
+        
+        /* 标题对齐修正 */
+        h3 { 
+            font-size: 1.1rem; margin: 0 0 12px 0; line-height: 1.3;
+            height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; 
+            -webkit-box-orient: vertical; overflow: hidden;
+        }
 
         .progress-wrapper { background: #222; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 8px; }
         .progress-bar { background: linear-gradient(90deg, #00d2ff, #3a7bd5); height: 100%; width: 0%; transition: width 1s ease; }
         .stats { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-dim); margin-bottom: 18px; }
 
-        .actions { display: flex; gap: 10px; }
-        .btn { flex: 1; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.85rem; transition: 0.2s; text-align: center; }
+        /* 弹窗样式保持原样 */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: #16161a; border: 1px solid #333; padding: 30px; border-radius: 20px; max-width: 450px; width: 90%; }
+        .info-section { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 12px; margin: 10px 0; border-left: 4px solid var(--primary); font-size: 0.8rem; }
+        
+        .btn { flex: 1; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-support { background: var(--primary); color: #000; }
         .btn-support:disabled { background: #444; cursor: not-allowed; }
         .btn-boost { background: transparent; border: 1px solid #444; color: var(--text-dim); }
 
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000;
+        @keyframes pulse-glow { 
+            0% { box-shadow: 0 0 0px var(--primary); } 
+            50% { box-shadow: 0 0 20px var(--primary); border-color: #fff; } 
+            100% { box-shadow: 0 0 0px var(--primary); } 
         }
-        .modal-content {
-            background: #16161a; border: 1px solid #333; padding: 30px; border-radius: 20px;
-            max-width: 450px; width: 90%; position: relative;
-        }
-
-        .info-section { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; margin: 15px 0; border-left: 4px solid var(--primary); }
-        .info-section h4 { margin: 0 0 5px 0; font-size: 0.85rem; color: var(--primary); }
-        .info-section p { margin: 0; font-size: 0.75rem; color: #aaa; line-height: 1.4; }
-
-        /* 强制阅读协议样式 */
-        .tos-agreement { margin: 15px 0; font-size: 0.75rem; color: #888; display: flex; align-items: flex-start; gap: 8px; }
-        .tos-agreement a { color: var(--primary); text-decoration: none; }
-        .tos-agreement input { margin-top: 2px; }
-
-        .loader {
-            width: 40px; height: 40px; border: 3px solid #333; border-bottom-color: var(--primary);
-            border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite;
-        }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .footer-disclaimer { margin-top: 60px; text-align: center; font-size: 0.7rem; color: #444; border-top: 1px solid #222; padding-top: 20px; }
+        .boosting { animation: pulse-glow 0.8s ease-in-out; }
+        .loader { width: 30px; height: 30px; border: 3px solid #333; border-bottom-color: var(--primary); border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; }
+        @keyframes rotation { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
+
 <body>
     <div class="header">
         <h1>INFINITY AUDIOBOOK</h1>
-        <p style="color: #666;">AI-Powered Collective Knowledge Initiative</p>
+        <p style="color: #666; font-size: 0.9rem;">AI-Powered Collective Knowledge Initiative</p>
     </div>
-    <div class="container" id="book-container"></div>
+
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('Hot', this)">🔥 Hot Picks</button>
+        <button class="tab-btn" onclick="switchTab('New', this)">🆕 New Arrivals</button>
+        <button class="tab-btn" onclick="switchTab('Archive', this)">🏛️ Archive</button>
+    </div>
+
+    <div class="container" id="book-container">
+        <div style="text-align:center; grid-column: 1/-1; color: #444;">Initializing knowledge node...</div>
+    </div>
 
     <div id="paymentModal" class="modal-overlay">
         <div class="modal-content">
             <div id="step-confirm">
                 <h3 style="color: var(--primary); margin-top: 0;">Service Confirmation</h3>
-                <div class="info-section" style="border-left-color: #eee;">
-                    <p><strong>Project:</strong> <span id="modalBookTitle"></span></p>
-                    <p><strong>Service Fee:</strong> $0.99 (Digital Support Credits)</p>
-                </div>
                 <div class="info-section">
-                    <h4>Why is it so affordable? / 为什么优惠？</h4>
-                    <p>We use AI technology to share the costs of format conversion and technical coordination across our community supporters.</p>
+                    <p><strong>Project:</strong> <span id="modalBookTitle"></span></p>
+                    <p><strong>Service Fee:</strong> $0.99 (Digital Credits)</p>
                 </div>
                 <div class="info-section" style="background: rgba(0,210,255,0.1);">
-                    <h4>🚀 Early Access Reward / 提前解锁奖励</h4>
-                    <p>Receive **instant access** via email immediately after your contribution. No need to wait for the goal!</p>
+                    <h4>🚀 Early Access Reward</h4>
+                    <p>Instant email delivery after payment. No waiting!</p>
                 </div>
-
-                <div class="tos-agreement">
-                    <input type="checkbox" id="tos-check" onchange="toggleSupportBtn()">
-                    <label for="tos-check">
-                        By clicking Join, I agree to the <a href="/terms" target="_blank">Terms of Service</a> and understand the nature of this collaborative technical project.
-                    </label>
+                <div style="margin: 15px 0; font-size: 0.75rem; color: #888; display: flex; gap: 8px;">
+                    <input type="checkbox" id="tos-check" onchange="document.getElementById('final-btn').disabled = !this.checked">
+                    <label for="tos-check">I agree to the <a href="terms.html" target="_blank" style="color:var(--primary)">Terms of Service</a>.</label>
                 </div>
-
-                <button id="final-support-btn" class="btn btn-support" style="width: 100%; margin-top: 10px; padding: 15px;" onclick="startSecureTransition()" disabled>
-                    Secure Checkout (🔒 100% SSL)
-                </button>
-                <p style="text-align: center; font-size: 0.7rem; color: #444; margin-top: 12px; cursor: pointer;" onclick="closeModal()">Cancel</p>
+                <button id="final-btn" class="btn btn-support" style="width: 100%;" onclick="startSecureTransition()" disabled>Secure Checkout</button>
+                <p style="text-align: center; font-size: 0.7rem; color: #444; margin-top: 15px; cursor: pointer;" onclick="closeModal()">Cancel</p>
             </div>
-            <div id="step-loading" style="display:none; text-align: center; padding: 40px 0;">
+            <div id="step-loading" style="display:none; text-align: center; padding: 20px;">
                 <div class="loader"></div>
-                <div id="loader-text" style="margin-top: 20px; font-weight: bold; color: var(--primary);">Securing your technical service spot...</div>
-                <div style="font-size: 0.7rem; color: #444; margin-top: 10px;">Establishing encrypted connection...</div>
+                <p id="loader-text" style="color: var(--primary); font-weight: bold;">Establishing encryption...</p>
             </div>
         </div>
     </div>
 
-    <div class="footer-disclaimer">
-        <p>Disclaimer: This is a cost-sharing technical service platform. We respect intellectual property.</p>
-        <p>Contact: <span style="color:var(--primary)">legal@your-real-email.com</span> (Replace with your actual email)</p>
-    </div>
-
     <script>
-        const books = [
-            { id: 'elon_musk', title: 'Elon Musk', progress: 34, target: 50, img: 'https://via.placeholder.com/100x150?text=Elon' },
-            { id: 'steve_jobs', title: 'Steve Jobs', progress: 22, target: 50, img: 'https://via.placeholder.com/100x150?text=Steve' },
-            { id: 'naval', title: 'Naval Almanack', progress: 45, target: 50, img: 'https://via.placeholder.com/100x150?text=Naval' }
-        ];
-
+        let allBooks = [];
+        let currentFilter = 'Hot';
         const container = document.getElementById('book-container');
         let currentBookId = '';
 
+        // 1. 获取数据
+        async function loadBooks() {
+            try {
+                // 替换为您部署后的 Cloudflare Worker URL
+                const response = await fetch('https://你的worker名字.workers.dev');
+                allBooks = await response.json();
+                render(); 
+            } catch (e) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center;">Connection Failed. Please refresh.</div>`;
+            }
+        }
+
+        // 2. 渲染逻辑 (含过滤)
         function render() {
             container.innerHTML = '';
-            books.forEach(book => {
+            const filtered = allBooks.filter(b => b.status === currentFilter);
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color:#444; padding:50px;">Nothing here yet. Try another tab!</div>`;
+                return;
+            }
+
+            filtered.forEach(book => {
                 const percent = ((book.progress / book.target) * 100).toFixed(1);
                 container.innerHTML += `
                     <div class="book-card" id="card-${book.id}">
                         <img src="${book.img}" class="cover">
                         <div class="book-info">
-                            <div class="badge">Technical Coordination Active</div>
+                            <div class="badge">${book.status === 'Archive' ? 'Unlocked' : 'Crowdfunding'}</div>
                             <h3>${book.title}</h3>
                             <div class="progress-wrapper">
-                                <div class="progress-bar" id="bar-${book.id}" style="width: ${percent}%"></div>
+                                <div class="progress-bar" style="width: ${percent}%"></div>
                             </div>
                             <div class="stats">
-                                <span><b id="txt-${book.id}">${percent}%</b> Complete</span>
+                                <span><b>${percent}%</b></span>
                                 <span>Target: ${book.target}</span>
                             </div>
                             <div class="actions">
-                                <button class="btn btn-support" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>
-                                <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀 Boost</button>
+                                <button class="btn btn-support" onclick="handlePayClick('${book.id}', '${book.title}')">
+                                    ${book.status === 'Archive' ? 'Get Now' : '$0.99'}
+                                </button>
+                                <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀</button>
                             </div>
                         </div>
                     </div>
@@ -171,61 +181,40 @@
             });
         }
 
+        // 3. Tab 切换
+        function switchTab(type, btn) {
+            currentFilter = type;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        }
+
+        // 4. 交互逻辑
         function handlePayClick(id, title) {
             currentBookId = id;
             document.getElementById('modalBookTitle').innerText = title;
-            document.getElementById('tos-check').checked = false;
-            document.getElementById('final-support-btn').disabled = true;
-            document.getElementById('step-confirm').style.display = 'block';
-            document.getElementById('step-loading').style.display = 'none';
             document.getElementById('paymentModal').style.display = 'flex';
-        }
-
-        function toggleSupportBtn() {
-            const isChecked = document.getElementById('tos-check').checked;
-            document.getElementById('final-support-btn').disabled = !isChecked;
         }
 
         function startSecureTransition() {
             document.getElementById('step-confirm').style.display = 'none';
             document.getElementById('step-loading').style.display = 'block';
-            setTimeout(() => { document.getElementById('loader-text').innerText = "Verifying service credits..."; }, 800);
-            // 这里替换为您在 Make.com 设置的支付跳转链接
-            setTimeout(() => { window.location.href = "https://your-payment-link.com?ref=" + currentBookId; }, 1600);
+            // 模拟跳转到支付链接 (Make.com 接管)
+            setTimeout(() => { 
+                window.location.href = "https://your-make-webhook.com?id=" + currentBookId; 
+            }, 1200);
         }
 
         function handleBoost(id, title) {
             const card = document.getElementById('card-' + id);
-            card.classList.remove('boosting');
-            void card.offsetWidth; 
             card.classList.add('boosting');
-
-            const bar = document.getElementById('bar-' + id);
-            const txt = document.getElementById('txt-' + id);
-            let cur = parseFloat(bar.style.width);
-            if (cur < 99.5) {
-                const newProgress = (cur + 0.5).toFixed(1);
-                bar.style.width = newProgress + '%';
-                txt.innerText = newProgress + '%';
-            }
-
-            const boostLink = window.location.origin + "/index.html?ref=" + id + "&src=boost";
-            const msg = "🔥 Awesome! You contributed to " + title + "!\\n\\nShare your unique boost link to help the community reach the goal faster:\\n" + boostLink;
-            
-            if (navigator.share) {
-                navigator.share({ title: 'Infinity Audiobook', text: msg, url: boostLink });
-            } else {
-                if (confirm(msg + "\\n\\nClick OK to copy boost link.")) {
-                    navigator.clipboard.writeText(boostLink);
-                    alert("Boost link copied! Thank you for your support! 🚀");
-                }
-            }
+            setTimeout(() => card.classList.remove('boosting'), 800);
+            alert("🚀 Boost link generated! Share this project to speed up progress.");
         }
 
         function closeModal() { document.getElementById('paymentModal').style.display = 'none'; }
-        window.onclick = (e) => { if(e.target.className == 'modal-overlay') closeModal(); }
         
-        render();
+        loadBooks(); // 启动
     </script>
 </body>
 </html>
