@@ -199,7 +199,7 @@
             // 请确保替换为你的 PayPal Button ID
             const paypalButtonId = "你的真实ID"; 
             const finalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=${paypalButtonId}&custom=${currentBookId}`;
-
+console.log(finalUrl);
             setTimeout(() => {
                 window.location.href = finalUrl;
             }, 1200);
