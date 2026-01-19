@@ -300,11 +300,24 @@
 
     <div id="emailModal" class="modal-overlay">
         <div class="modal">
-            <h2 id="archiveTitle">Instant Access</h2>
-            <input type="email" id="userEmail" placeholder="your@email.com">
-            <button class="btn btn-get" id="emailBtn" onclick="submitEmailRequest()">Get Community Version</button>
-            <p style="margin-top:20px; font-size:0.8rem; color:#999; cursor:pointer" onclick="closeModals()">Back</p>
+            <div style="font-size: 3rem; margin-bottom: 10px;">📩</div>
+            <h2 id="archiveTitle" style="margin-top: 0;">Instant Access</h2>
+            <p style="color: var(--text-dim); font-size: 0.9rem;">The project is complete! Enter your email to receive the access key and study materials.</p>
+
+            <div style="text-align: left; margin-bottom: 15px;">
+                <label style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">EMAIL ADDRESS</label>
+                <input type="email" id="userEmail" placeholder="reader@example.com" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; margin-top: 5px; box-sizing: border-box;">
+            </div>
+
+            <button class="btn btn-get" id="emailBtn" onclick="submitEmailRequest()">
+                Verify & Get Access
+            </button>
+            <p style="margin-top:20px; font-size:0.8rem; color:#999; cursor:pointer" onclick="closeModals()">← Back to Library</p>
         </div>
+    </div>
+
+    <div id="toast" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+     background: #333; color: #fff; padding: 12px 24px; border-radius: 50px; display: none; z-index: 9999;">
     </div>
 
     <script>
@@ -450,35 +463,57 @@
         }
 
         function handleBoost(title) {
-            const text = `Join me to unlock the AI Audiobook for "${title}"! Check it out:`;
-            const url = window.location.href;
+            const shareData = {
+                title: `Collective Knowledge: ${title}`,
+                text: `I just supported "${title}" on OurBook. Help us unlock this AI Audiobook project!`,
+                url: window.location.href
+            };
+
+            // 优先尝试原生分享接口 (移动端效果最佳)
             if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    text: text,
-                    url: url
-                });
+                navigator.share(shareData)
+                    .then(() => showToast("Thanks for boosting!"))
+                    .catch((err) => console.log('Share cancelled'));
             } else {
-                alert("Copy link to share and boost: " + url);
+                // 桌面端降级方案：一键复制链接
+                const dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = shareData.url;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+
+                showToast("🚀 Link copied! Share it to boost the project.");
             }
         }
 
         function openEmailModal(id) {
             activeBook = allBooks.find(b => b.id === id);
+            if (!activeBook) return;
+
             document.getElementById('archiveTitle').innerText = activeBook.title;
+            const emailInput = document.getElementById('userEmail');
+            emailInput.value = ""; // 清空旧数据
+            emailInput.style.borderColor = "#eee";
+
             document.getElementById('emailModal').style.display = 'flex';
         }
 
         async function submitEmailRequest() {
             const email = document.getElementById('userEmail').value;
-            if (!email.includes('@')) return alert('Valid email required.');
-
             const btn = document.getElementById('emailBtn');
-            btn.innerText = "Syncing Access...";
+
+            // 简易正则验证
+            if (!email || !email.includes('@')) {
+                document.getElementById('userEmail').style.borderColor = "#ff4d4d";
+                return showToast("Please enter a valid email.");
+            }
+
+            btn.innerText = "⚡ Syncing Access...";
             btn.disabled = true;
 
             try {
-                // 向 Make.com 发送请求
+                // 同步至 Make.com 记录数据
                 await fetch(MAKE_URL, {
                     method: 'POST',
                     headers: {
@@ -487,14 +522,33 @@
                     body: JSON.stringify({
                         email: email,
                         bookId: activeBook.id,
-                        title: activeBook.title
+                        title: activeBook.title,
+                        timestamp: new Date().toISOString()
                     })
                 });
-                // 无论成功与否，跳转到存储地址 (book.drive 需在 Sheet 中定义)
-                window.location.href = activeBook.drive || '#';
+
+                showToast("Success! Redirecting to access node...");
+
+                // 延迟跳转，给用户一点点反馈时间
+                setTimeout(() => {
+                    window.location.href = activeBook.drive || '#';
+                }, 1500);
+
             } catch (e) {
+                console.error("Sync error:", e);
+                // 如果失败，通常依然允许跳转以保证用户体验
                 window.location.href = activeBook.drive || '#';
             }
+        }
+
+        /* --- 辅助：Toast 提示系统 --- */
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
         }
 
         function closeModals() {
