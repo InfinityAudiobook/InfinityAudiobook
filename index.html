@@ -149,7 +149,9 @@
         let activeBook = null;
 
         function render() {
-            const grid = document.getElementById('book-grid');
+            const cur = parseFloat(book.current_credits) || 0;
+    const tar = parseFloat(book.target_credits) || 1000;
+    const percent = ((cur / tar) * 100).toFixed(1);
             grid.innerHTML = '';
             const filtered = books.filter(b => currentTab === 'archive' ? b.status === 'Archive' : b.status.toLowerCase() === currentTab);
 
