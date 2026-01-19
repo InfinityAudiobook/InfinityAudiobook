@@ -136,96 +136,108 @@
         </div>
     </div>
 
- <script>
-    let allBooks = []; // 存储从服务器获取的所有书籍
-    const container = document.getElementById('book-container');
-    let currentBookId = '';
+<script>
+    // 定义全局变量
+    let allBooks = []; 
+    let currentTab = 'hot';
 
-    // 1. 从 Worker 获取实时数据
+    // 1. 修正后的加载函数
     async function loadBooks() {
+        // 自动识别容器，优先找 book-grid
+        const container = document.getElementById('book-grid') || document.getElementById('book-container');
+        
+        if (!container) {
+            console.error("致命错误：找不到书籍容器 (book-grid)");
+            return;
+        }
+
         try {
-            // 添加时间戳防止浏览器缓存 JSON 结果
             const response = await fetch('https://sparkling-recipe-6de6.infinityaudiobook.workers.dev/?t=' + Date.now());
-            allBooks = await response.json();
+            const data = await response.json();
+            
+            // 调试用：在控制台打印数据，确认字段名
+            console.log("Worker Data:", data); 
+
+            // 确保数据赋值给渲染函数使用的变量
+            allBooks = Array.isArray(data) ? data : [];
+            
             render(); 
         } catch (e) {
             console.error("Fetch error:", e);
-            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center;">Connection Failed. Please refresh.</div>`;
+            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                Connection Failed. <br> <button onclick="loadBooks()" style="margin-top:10px; cursor:pointer;">Retry</button>
+            </div>`;
         }
     }
 
-    // 2. 渲染页面内容
+    // 2. 修正后的渲染函数
     function render() {
+        const container = document.getElementById('book-grid') || document.getElementById('book-container');
+        if (!container) return;
+
         container.innerHTML = '';
         
-        allBooks.forEach(book => {
-            // --- 核心修复：匹配 Google Sheet 里的真实列名 ---
+        // 过滤标签逻辑
+        const filtered = allBooks.filter(b => {
+            if (currentTab === 'archive') return b.status === 'Archive';
+            return b.status && b.status.toLowerCase() === currentTab;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #999;">No books found in this category.</div>`;
+        }
+
+        filtered.forEach(book => {
+            // 容错处理：确保即使字段缺失也不会报错
             const current = parseFloat(book.current_credits) || 0;
             const target = parseFloat(book.target_credits) || 1000;
             const percent = ((current / target) * 100).toFixed(1);
-            // ------------------------------------------
-
             const isArchive = book.status === 'Archive';
 
             container.innerHTML += `
-                <div class="book-card" id="card-${book.id}">
-                    <img src="${book.img}" class="cover">
+                <div class="book-card">
+                    <img src="${book.img || book.cover}" class="cover" onerror="this.src='https://via.placeholder.com/250x375?text=No+Cover'">
                     <div class="book-info">
-                        <div class="badge">${isArchive ? 'Unlocked' : 'Technical Coordination Active'}</div>
-                        <h3>${book.title}</h3>
-                        <div class="progress-wrapper">
-                            <div class="progress-bar" id="bar-${book.id}" style="width: ${percent}%"></div>
-                        </div>
-                        <div class="stats">
-                            <span><b id="txt-${book.id}">${percent}%</b> Complete</span>
-                            <span>Target: ${target}</span>
-                        </div>
-                        <div class="actions">
-                            ${isArchive ? 
-                                `<a href="${book.download_url}" target="_blank" class="btn btn-support" style="text-decoration:none; color:#000; display:flex; align-items:center; justify-content:center;">Get Now</a>` : 
-                                `<button class="btn btn-support" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>`
-                            }
-                            <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀 Boost</button>
-                        </div>
+                        <div class="badge">${isArchive ? 'Unlocked' : 'In Progress'}</div>
+                        <h3 style="margin:10px 0;">${book.title}</h3>
+                        ${isArchive ? `
+                            <button class="btn btn-get" onclick="openEmailModal('${book.id}')">Get Access</button>
+                            <a href="${book.amazon || '#'}" target="_blank" class="btn btn-amazon">Support Original</a>
+                        ` : `
+                            <div class="progress-box">
+                                <div class="progress-bg">
+                                    <div class="progress-fill" style="width: ${percent}%"></div>
+                                </div>
+                                <div class="prog-info">
+                                    <span>Progress: ${percent}%</span>
+                                    <span>Goal: ${target}</span>
+                                </div>
+                            </div>
+                            <button class="btn btn-pay" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>
+                        `}
                     </div>
                 </div>
             `;
         });
     }
 
-    // 3. 支付弹窗处理
+    // 3. 标签切换修复
+    function switchTab(tab, btn) {
+        currentTab = tab.toLowerCase();
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render();
+    }
+
+    // 4. 支付弹窗修复
     function handlePayClick(id, title) {
-        currentBookId = id;
-        document.getElementById('modalBookTitle').innerText = title;
-        document.getElementById('tos-check').checked = false;
-        document.getElementById('final-support-btn').disabled = true;
-        document.getElementById('step-confirm').style.display = 'block';
-        document.getElementById('step-loading').style.display = 'none';
-        document.getElementById('paymentModal').style.display = 'flex';
+        window.activeBook = allBooks.find(b => b.id === id);
+        document.getElementById('payTitle').innerText = title;
+        document.getElementById('payModal').style.display = 'flex';
     }
 
-    function toggleSupportBtn() {
-        const isChecked = document.getElementById('tos-check').checked;
-        document.getElementById('final-support-btn').disabled = !isChecked;
-    }
-
-    // 4. 跳转至 PayPal (带上自定义 ID)
-    function startSecureTransition() {
-        document.getElementById('step-confirm').style.display = 'none';
-        document.getElementById('step-loading').style.display = 'block';
-        
-        // 替换为你真实的 PayPal 按钮 ID
-        const paypalButtonId = "你的ID"; 
-        const finalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=${paypalButtonId}&custom=${currentBookId}`;
-
-        setTimeout(() => { window.location.href = finalUrl; }, 1500);
-    }
-
-    function closeModal() { document.getElementById('paymentModal').style.display = 'none'; }
-    window.onclick = (e) => { if(e.target.className == 'modal-overlay') closeModal(); }
-
-    // 初始加载
-    loadBooks();
+    // 确保 DOM 加载完成后再执行
+    window.addEventListener('DOMContentLoaded', loadBooks);
 </script>
 </body>
 </html>
