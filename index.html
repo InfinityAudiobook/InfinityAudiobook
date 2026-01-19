@@ -493,97 +493,103 @@
         }
 
         /* 4. 核心渲染函数 (功能区分逻辑) */
+    /* 4. 核心渲染函数 (已修复投票栏逻辑) */
         function render() {
-    const grid = document.getElementById('book-grid');
-    if (!grid) return;
+            const grid = document.getElementById('book-grid');
+            const voteGrid = document.getElementById('vote-grid');
+            if (!grid || !voteGrid) return;
 
-    // --- 第一步：渲染主内容区 (Tabs 切换的内容) ---
-    grid.innerHTML = '';
+            // --- 第一步：渲染上方主内容区 (Hot/New/Archive) ---
+            grid.innerHTML = '';
+            const filtered = allBooks.filter(b => {
+                const status = (b.status || '').toLowerCase();
+                if (currentTab === 'archive') return status === 'archive';
+                return status === currentTab;
+            });
 
-    // 过滤出当前标签对应的书籍 (排除投票状态的书籍)
-    const filtered = allBooks.filter(b => {
-        const status = (b.status || '').toLowerCase();
-        if (currentTab === 'archive') return status === 'archive';
-        return status === currentTab;
-    });
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">No active projects in this sector.</div>`;
+            } else {
+                filtered.forEach(book => {
+                    const current = parseFloat(book.current_credits) || 0;
+                    const target = parseFloat(book.target_credits) || 1000;
+                    const percent = Math.min(((current / target) * 100), 100).toFixed(1);
+                    const isArchive = (book.status || '').toLowerCase() === 'archive';
 
-    if (filtered.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">No active projects in this sector.</div>`;
-    } else {
-        filtered.forEach(book => {
-            const current = parseFloat(book.current_credits) || 0;
-            const target = parseFloat(book.target_credits) || 1000;
-            const percent = Math.min(((current / target) * 100), 100).toFixed(1);
-            const isArchive = book.status.toLowerCase() === 'archive';
-
-            grid.innerHTML += `
-                <div class="book-card">
-                    <img src="${book.img || book.cover}" class="cover" onerror="this.src='https://via.placeholder.com/250x375?text=Syncing...'">
-                    <div class="book-info">
-                        <div class="badge">${isArchive ? 'Knowledge Unlocked' : 'In Progress'}</div>
-                        <h3 style="margin:10px 0; min-height: 2.4em;">${book.title}</h3>
-                        ${isArchive ? `
-                            <button class="btn btn-get" onclick="openEmailModal('${book.id}')">Get Access</button>
-                            <a href="${book.amazon || '#'}" target="_blank" class="btn btn-amazon">Support Original</a>
-                        ` : `
-                            <div class="progress-box">
-                                <div class="progress-bg"><div class="progress-fill" style="width: ${percent}%"></div></div>
-                                <div class="prog-info"><span>Progress: ${percent}%</span><span>Goal: ${target}</span></div>
+                    grid.innerHTML += `
+                        <div class="book-card">
+                            <img src="${book.img || book.cover}" class="cover" onerror="this.src='https://via.placeholder.com/250x375?text=Syncing...'">
+                            <div class="book-info">
+                                <div class="badge">${isArchive ? 'Knowledge Unlocked' : 'In Progress'}</div>
+                                <h3 style="margin:10px 0; min-height: 2.4em;">${book.title}</h3>
+                                ${isArchive ? `
+                                    <button class="btn btn-get" onclick="openEmailModal('${book.id}')">Get Access</button>
+                                    <a href="${book.amazon || '#'}" target="_blank" class="btn btn-amazon">Support Original</a>
+                                ` : `
+                                    <div class="progress-box">
+                                        <div class="progress-bg"><div class="progress-fill" style="width: ${percent}%"></div></div>
+                                        <div class="prog-info"><span>Progress: ${percent}%</span><span>Goal: ${target}</span></div>
+                                    </div>
+                                    <button class="btn btn-pay" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>
+                                    <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀 Boost Project</button>
+                                `}
                             </div>
-                            <button class="btn btn-pay" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>
-                            <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀 Boost Project</button>
-                        `}
-                    </div>
-                </div>
-            `;
-        });
-    }
+                        </div>`;
+                });
+            }
 
-    // --- 第二步：追加投票区 (瀑布流布局的 "+1" 部分) ---
-    // 找出所有状态为 vote 的书籍
-    const voteBooks = allBooks.filter(b => (b.status || '').toLowerCase() === 'vote');
+            // --- 第二步：渲染下方专用投票区 (独立于 Tab) ---
+            const voteBooks = allBooks.filter(b => (b.status || '').toLowerCase() === 'vote');
+            voteGrid.innerHTML = ''; // 清空投票专用网格
 
-    if (voteBooks.length > 0) {
-        // 在网格下方追加一个全宽的投票板块
-        grid.innerHTML += `
-            <div class="vote-container" style="grid-column: 1/-1; margin-top: 50px; border-top: 2px dashed var(--border); padding-top: 40px;">
-                <div style="text-align: center; margin-bottom: 30px;">
-                    <h2 style="color: var(--primary); margin: 0;">🗳️ Vote for Next Month</h2>
-                    <p style="color: var(--text-dim); font-size: 0.9rem;">Help us choose which knowledge to unlock next! The winner starts next week.</p>
-                </div>
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px;">
-                    ${voteBooks.map(book => `
-                        <div class="vote-card" style="background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 15px; text-align: center;">
-                            <img src="${book.img || book.cover}" style="width: 100%; height: 180px; object-fit: cover; border-radius: 8px; filter: grayscale(0.2);">
+            if (voteBooks.length > 0) {
+                voteBooks.forEach(book => {
+                    // 兼容多种票数字段名：votes 或 current_credits
+                    const voteCount = book.votes || book.current_credits || 0;
+                    voteGrid.innerHTML += `
+                        <div class="vote-card">
+                            <img src="${book.img || book.cover}" class="cover-sm" onerror="this.src='https://via.placeholder.com/200x300?text=Pending'">
                             <h4 style="margin: 12px 0; font-size: 0.95rem; height: 2.4em; overflow: hidden;">${book.title}</h4>
-                            <div style="color: var(--primary); font-weight: 800; margin-bottom: 10px;">🗳️ ${book.votes || 0} Votes</div>
+                            <div class="vote-stats">🗳️ ${voteCount} Votes</div>
                             <button class="btn btn-pay" style="padding: 8px; font-size: 0.8rem;" onclick="handleVote('${book.id}')">Vote Now</button>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }
-}
+                        </div>`;
+                });
+            } else {
+                voteGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 20px;">Next pool opening soon...</p>`;
+            }
+        }
 
-// 补充投票处理函数
-async function handleVote(id) {
-    if(localStorage.getItem('voted_' + id)) return showToast("Already voted!");
-    
-    showToast("Recording vote...");
-    try {
-        // 这里的 VOTE_URL 是你 Make.com 投票专用的 Webhook
-        await fetch('你的_VOTE_WEBHOOK_URL', {
-            method: 'POST',
-            body: JSON.stringify({ bookId: id })
-        });
-        localStorage.setItem('voted_' + id, 'true');
-        showToast("🚀 Vote recorded!");
-        loadBooks(); // 刷新数据以显示最新票数
-    } catch (e) {
-        showToast("Sync error, try again.");
-    }
-}
+        // 修复后的投票处理函数
+        async function handleVote(id) {
+            if(localStorage.getItem('voted_' + id)) {
+                return showToast("You've already voted for this book!");
+            }
+            
+            showToast("Recording vote...");
+            try {
+                // 确保此 URL 已替换为你 Make.com 的实际 Webhook 地址
+                const response = await fetch('你的_VOTE_WEBHOOK_URL', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        bookId: id,
+                        action: 'vote',
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                if (response.ok) {
+                    localStorage.setItem('voted_' + id, 'true');
+                    showToast("🚀 Vote recorded! Thank you.");
+                    // 延迟一秒重新加载数据，以便显示更新后的票数
+                    setTimeout(loadBooks, 1000); 
+                } else {
+                    throw new Error();
+                }
+            } catch (e) {
+                showToast("Connection busy, but we'll try to count it!");
+            }
+        }
         /* 5. 交互功能函数 */
         function switchTab(tab, btn) {
             currentTab = tab.toLowerCase();
