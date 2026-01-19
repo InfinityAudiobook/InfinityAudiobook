@@ -148,34 +148,40 @@
         let currentTab = 'hot';
         let activeBook = null;
 
-        function render() {
-            const cur = parseFloat(book.current_credits) || 0;
-    const tar = parseFloat(book.target_credits) || 1000;
-    const percent = ((cur / tar) * 100).toFixed(1);
-            grid.innerHTML = '';
-            const filtered = books.filter(b => currentTab === 'archive' ? b.status === 'Archive' : b.status.toLowerCase() === currentTab);
+function render() {
+    container.innerHTML = '';
+    books.forEach(book => {
+        // --- 核心修复：匹配 Google Sheet 里的真实列名 ---
+        const current = parseFloat(book.current_credits) || 0;
+        const target = parseFloat(book.target_credits) || 1000;
+        const percent = ((current / target) * 100).toFixed(1);
+        // ------------------------------------------
 
-            filtered.forEach(book => {
-                const isArchive = book.status === 'Archive';
-                const card = document.createElement('div');
-                card.className = 'book-card';
-                card.innerHTML = `
-                    <img src="${book.cover}" class="cover">
+        container.innerHTML += `
+            <div class="book-card" id="card-${book.id}">
+                <img src="${book.img}" class="cover">
+                <div class="book-info">
+                    <div class="badge">${book.status}</div>
                     <h3>${book.title}</h3>
-                    ${isArchive ? `
-                        <button class="btn btn-get" onclick="openEmailModal('${book.id}')">Get Access</button>
-                        <a href="${book.amazon}" target="_blank" class="btn btn-amazon">Support Original</a>
-                    ` : `
-                        <div class="progress-box">
-                            <div class="progress-bg"><div class="progress-fill" style="width:${book.progress}%"></div></div>
-                            <div class="prog-info"><span>Progress: ${book.progress}%</span><span>Goal: 1000 pts</span></div>
-                        </div>
-                        <button class="btn btn-pay" onclick="openPayModal('${book.id}')">Support $0.99</button>
-                    `}
-                `;
-                grid.appendChild(card);
-            });
-        }
+                    <div class="progress-wrapper">
+                        <div class="progress-bar" id="bar-${book.id}" style="width: ${percent}%"></div>
+                    </div>
+                    <div class="stats">
+                        <span><b id="txt-${book.id}">${percent}%</b> Complete</span>
+                        <span>Goal: ${target}</span>
+                    </div>
+                    <div class="actions">
+                        ${book.status === 'Archive' ? 
+                            `<a href="${book.download_url}" class="btn btn-support" style="text-decoration:none; color:#000;">Get Access</a>` : 
+                            `<button class="btn btn-support" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>`
+                        }
+                        <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀 Boost</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+}
 
         function switchTab(tab, btn) {
             currentTab = tab;
