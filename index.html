@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OurBook | AI-Powered Collective Knowledge</title>
     <style>
         :root {
-            --primary: #0070ba; 
-            --bg: #f8f9fa;      
-            --card: #ffffff;    
+            --primary: #0070ba;
+            --bg: #f8f9fa;
+            --card: #ffffff;
             --text-main: #222222;
             --text-dim: #666666;
             --amazon: #ff9900;
@@ -17,56 +18,202 @@
             --footer-bg: #ffffff;
         }
 
-        body { background: var(--bg); color: var(--text-main); font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        .main-content { flex: 1; padding: 40px 20px; }
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { color: var(--primary); font-weight: 800; letter-spacing: 1px; margin: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin: 0;
+        }
 
         /* 三栏目 Tab */
-        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 35px; }
-        .tab-btn { 
-            background: #fff; border: 1px solid var(--border); color: var(--text-dim); 
-            padding: 10px 22px; cursor: pointer; border-radius: 50px; font-weight: 600; transition: 0.3s;
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 35px;
         }
-        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,112,186,0.2); }
+
+        .tab-btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 10px 22px;
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(0, 112, 186, 0.2);
+        }
 
         .container {
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 25px;
         }
 
         .book-card {
-            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-            padding: 20px; display: flex; flex-direction: column; transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
         }
-        .book-card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px rgba(0,0,0,0.08); }
-        .cover { width: 100%; height: 360px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .cover {
+            width: 100%;
+            height: 360px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
 
         /* 进度条 */
-        .progress-box { margin: 15px 0; }
-        .progress-bg { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
-        .progress-fill { background: var(--primary); height: 100%; width: 0%; transition: width 1s; }
-        .prog-info { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-top: 6px; }
+        .progress-box {
+            margin: 15px 0;
+        }
+
+        .progress-bg {
+            background: #eee;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 1s;
+        }
+
+        .prog-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 6px;
+        }
 
         /* 按钮 */
         .btn {
-            display: block; width: 100%; padding: 12px; border-radius: 10px; border: none;
-            font-weight: 700; cursor: pointer; text-align: center; text-decoration: none;
-            margin-top: 10px; font-size: 0.9rem; box-sizing: border-box; transition: 0.2s;
+            display: block;
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            transition: 0.2s;
         }
-        .btn-pay { background: var(--primary); color: #fff; }
-        .btn-boost { background: #fff; border: 1px solid #ddd; color: var(--text-dim); }
-        .btn-get { background: var(--success); color: #fff; }
-        .btn-amazon { background: #fff; border: 1px solid var(--amazon); color: var(--amazon); }
+
+        .btn-pay {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .btn-boost {
+            background: #fff;
+            border: 1px solid #ddd;
+            color: var(--text-dim);
+        }
+
+        .btn-get {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .btn-amazon {
+            background: #fff;
+            border: 1px solid var(--amazon);
+            color: var(--amazon);
+        }
 
         /* 弹窗与加载 */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal { background: #fff; padding: 40px; border-radius: 24px; width: 90%; max-width: 360px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #eee; }
-        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background: #fff;
+            padding: 40px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
         /* 底部 Footer 样式 */
         footer {
@@ -75,17 +222,41 @@
             padding: 40px 20px;
             margin-top: 60px;
         }
-        .footer-content { max-width: 800px; margin: 0 auto; text-align: center; }
-        .footer-logo { font-weight: 800; color: var(--primary); margin-bottom: 15px; display: block; }
-        .disclaimer { font-size: 0.75rem; color: #999; line-height: 1.6; text-align: justify; }
-        .copyright { margin-top: 25px; font-size: 0.8rem; color: var(--text-dim); }
 
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .disclaimer {
+            font-size: 0.75rem;
+            color: #999;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .copyright {
+            margin-top: 25px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
     </style>
 </head>
+
 <body>
 
     <div class="main-content">
-        <div class="header"><h1>OURBOOK</h1></div>
+        <div class="header">
+            <h1>OURBOOK</h1>
+        </div>
 
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('hot', this)">Hot Picks</button>
@@ -100,8 +271,8 @@
         <div class="footer-content">
             <span class="footer-logo">OurBook Collective</span>
             <div class="disclaimer">
-                <strong>Disclaimer:</strong> OurBook provides a technical platform for AI-powered cloud transcription and group-buying collaboration. 
-                By using our service, users acknowledge that they are contributing to a service-based cost-splitting project for personal study and research purposes only. 
+                <strong>Disclaimer:</strong> OurBook provides a technical platform for AI-powered cloud transcription and group-buying collaboration.
+                By using our service, users acknowledge that they are contributing to a service-based cost-splitting project for personal study and research purposes only.
                 We act as a collective acquisition agent to facilitate access to premium knowledge through AI-driven digital conversion.
             </div>
             <div class="copyright">
@@ -136,70 +307,89 @@
         </div>
     </div>
 
-<script>
-    // 定义全局变量
-    let allBooks = []; 
-    let currentTab = 'hot';
-
-    // 1. 修正后的加载函数
-    async function loadBooks() {
-        // 自动识别容器，优先找 book-grid
-        const container = document.getElementById('book-grid') || document.getElementById('book-container');
-        
-        if (!container) {
-            console.error("致命错误：找不到书籍容器 (book-grid)");
-            return;
+    <script>
+        /* 1. 安全防护逻辑 */
+        // 防止点击劫持 (Clickjacking Protection)
+        if (self !== top) {
+            top.location = self.location;
+        }
+        // 强制 HTTPS 访问 (Force HTTPS)
+        if (location.protocol === 'http:' && !location.hostname.includes('localhost')) {
+            location.replace(`https://${location.hostname}${location.pathname}${location.search}`);
         }
 
-        try {
-            const response = await fetch('https://sparkling-recipe-6de6.infinityaudiobook.workers.dev/?t=' + Date.now());
-            const data = await response.json();
-            
-            // 调试用：在控制台打印数据，确认字段名
-            console.log("Worker Data:", data); 
+        /* 2. 全局状态变量 */
+        let allBooks = [];
+        let currentTab = 'hot';
+        let activeBook = null;
+        const PAYPAL_EMAIL = "your-paypal@example.com"; // 建议与 PayPal 按钮 ID 配合使用
+        const MAKE_URL = "https://hook.us1.make.com/YOUR_CODE";
 
-            // 确保数据赋值给渲染函数使用的变量
-            allBooks = Array.isArray(data) ? data : [];
-            
-            render(); 
-        } catch (e) {
-            console.error("Fetch error:", e);
-            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-                Connection Failed. <br> <button onclick="loadBooks()" style="margin-top:10px; cursor:pointer;">Retry</button>
-            </div>`;
+        /* 3. 数据加载逻辑 (带 Loading 状态) */
+        async function loadBooks() {
+            const grid = document.getElementById('book-grid');
+            if (!grid) return;
+
+            // 注入初次加载的 Loading 状态
+            grid.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px 0;">
+                <div class="spinner"></div>
+                <p style="color: var(--text-dim); margin-top: 15px; font-weight: 600;">Establishing Secure Connection...</p>
+            </div>
+        `;
+
+            try {
+                // 从 Worker 获取实时数据
+                const response = await fetch('https://sparkling-recipe-6de6.infinityaudiobook.workers.dev/?t=' + Date.now());
+                const data = await response.json();
+
+                // 确保数据赋值给变量
+                allBooks = Array.isArray(data) ? data : [];
+                render();
+            } catch (e) {
+                console.error("Sync Error:", e);
+                grid.innerHTML = `
+                <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                    <p style="color: #ff4d4d;">Data Sync Failed.</p>
+                    <button class="tab-btn active" onclick="loadBooks()">Retry Connection</button>
+                </div>
+            `;
+            }
         }
-    }
 
-    // 2. 修正后的渲染函数
-    function render() {
-        const container = document.getElementById('book-grid') || document.getElementById('book-container');
-        if (!container) return;
+        /* 4. 核心渲染函数 (功能区分逻辑) */
+        function render() {
+            const grid = document.getElementById('book-grid');
+            if (!grid) return;
 
-        container.innerHTML = '';
-        
-        // 过滤标签逻辑
-        const filtered = allBooks.filter(b => {
-            if (currentTab === 'archive') return b.status === 'Archive';
-            return b.status && b.status.toLowerCase() === currentTab;
-        });
+            grid.innerHTML = '';
 
-        if (filtered.length === 0) {
-            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #999;">No books found in this category.</div>`;
-        }
+            // 过滤逻辑：匹配当前标签
+            const filtered = allBooks.filter(b => {
+                const status = (b.status || '').toLowerCase();
+                if (currentTab === 'archive') return status === 'archive';
+                return status === currentTab;
+            });
 
-        filtered.forEach(book => {
-            // 容错处理：确保即使字段缺失也不会报错
-            const current = parseFloat(book.current_credits) || 0;
-            const target = parseFloat(book.target_credits) || 1000;
-            const percent = ((current / target) * 100).toFixed(1);
-            const isArchive = book.status === 'Archive';
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">No active nodes in this sector.</div>`;
+                return;
+            }
 
-            container.innerHTML += `
+            filtered.forEach(book => {
+                // 解析数值与进度
+                const current = parseFloat(book.current_credits) || 0;
+                const target = parseFloat(book.target_credits) || 1000;
+                const percent = Math.min(((current / target) * 100), 100).toFixed(1);
+                const isArchive = book.status === 'Archive';
+
+                grid.innerHTML += `
                 <div class="book-card">
-                    <img src="${book.img || book.cover}" class="cover" onerror="this.src='https://via.placeholder.com/250x375?text=No+Cover'">
+                    <img src="${book.img || book.cover}" class="cover" onerror="this.src='https://via.placeholder.com/250x375?text=Syncing+Cover...'">
                     <div class="book-info">
-                        <div class="badge">${isArchive ? 'Unlocked' : 'In Progress'}</div>
-                        <h3 style="margin:10px 0;">${book.title}</h3>
+                        <div class="badge">${isArchive ? 'Knowledge Unlocked' : 'In Progress'}</div>
+                        <h3 style="margin:10px 0; min-height: 2.4em;">${book.title}</h3>
+                        
                         ${isArchive ? `
                             <button class="btn btn-get" onclick="openEmailModal('${book.id}')">Get Access</button>
                             <a href="${book.amazon || '#'}" target="_blank" class="btn btn-amazon">Support Original</a>
@@ -214,30 +404,106 @@
                                 </div>
                             </div>
                             <button class="btn btn-pay" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>
+                            <button class="btn btn-boost" onclick="handleBoost('${book.title}')">🚀 Boost Project</button>
                         `}
                     </div>
                 </div>
             `;
-        });
-    }
+            });
+        }
 
-    // 3. 标签切换修复
-    function switchTab(tab, btn) {
-        currentTab = tab.toLowerCase();
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        render();
-    }
+        /* 5. 交互功能函数 */
+        function switchTab(tab, btn) {
+            currentTab = tab.toLowerCase();
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        }
 
-    // 4. 支付弹窗修复
-    function handlePayClick(id, title) {
-        window.activeBook = allBooks.find(b => b.id === id);
-        document.getElementById('payTitle').innerText = title;
-        document.getElementById('payModal').style.display = 'flex';
-    }
+        function handlePayClick(id, title) {
+            activeBook = allBooks.find(b => b.id === id);
+            document.getElementById('payTitle').innerText = title;
+            document.getElementById('payModal').style.display = 'flex';
+        }
 
-    // 确保 DOM 加载完成后再执行
-    window.addEventListener('DOMContentLoaded', loadBooks);
-</script>
+        function executePayPal() {
+            if (!activeBook) return;
+            document.getElementById('payModal').style.display = 'none';
+            document.getElementById('secure-loading').style.display = 'flex';
+
+            // 构建 PayPal 参数，核心是 custom 字段，用于 Make.com 识别
+            const params = new URLSearchParams({
+                cmd: "_xclick",
+                business: PAYPAL_EMAIL,
+                item_name: `Credits for ${activeBook.title}`,
+                amount: "0.99",
+                currency_code: "USD",
+                custom: activeBook.id, // 传递书籍 ID
+                no_shipping: "1",
+                return: window.location.origin,
+                cancel_return: window.location.origin
+            });
+
+            setTimeout(() => {
+                window.location.href = `https://www.paypal.com/cgi-bin/webscr?${params.toString()}`;
+            }, 1500);
+        }
+
+        function handleBoost(title) {
+            const text = `Join me to unlock the AI Audiobook for "${title}"! Check it out:`;
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: text,
+                    url: url
+                });
+            } else {
+                alert("Copy link to share and boost: " + url);
+            }
+        }
+
+        function openEmailModal(id) {
+            activeBook = allBooks.find(b => b.id === id);
+            document.getElementById('archiveTitle').innerText = activeBook.title;
+            document.getElementById('emailModal').style.display = 'flex';
+        }
+
+        async function submitEmailRequest() {
+            const email = document.getElementById('userEmail').value;
+            if (!email.includes('@')) return alert('Valid email required.');
+
+            const btn = document.getElementById('emailBtn');
+            btn.innerText = "Syncing Access...";
+            btn.disabled = true;
+
+            try {
+                // 向 Make.com 发送请求
+                await fetch(MAKE_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        bookId: activeBook.id,
+                        title: activeBook.title
+                    })
+                });
+                // 无论成功与否，跳转到存储地址 (book.drive 需在 Sheet 中定义)
+                window.location.href = activeBook.drive || '#';
+            } catch (e) {
+                window.location.href = activeBook.drive || '#';
+            }
+        }
+
+        function closeModals() {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        }
+
+        // 初始化
+        window.addEventListener('DOMContentLoaded', loadBooks);
+    </script>
 </body>
+
 </html>
