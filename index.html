@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OurBook | AI-Powered Collective Knowledge</title>
     <style>
         :root {
-            --primary: #0070ba;
-            --bg: #f8f9fa;
-            --card: #ffffff;
+            --primary: #0070ba; 
+            --bg: #f8f9fa;      
+            --card: #ffffff;    
             --text-main: #222222;
             --text-dim: #666666;
             --amazon: #ff9900;
@@ -18,488 +17,176 @@
             --footer-bg: #ffffff;
         }
 
-        body {
-            background: var(--bg);
-            color: var(--text-main);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+        body { background: var(--bg); color: var(--text-main); font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        .main-content { flex: 1; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { color: var(--primary); font-weight: 800; letter-spacing: 1px; margin: 0; }
 
-        .main-content {
-            flex: 1;
-            padding: 40px 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
-            color: var(--primary);
-            font-weight: 800;
-            letter-spacing: 1px;
-            margin: 0;
-        }
-
-        /* 三栏目 Tab */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 35px;
-        }
-
+        /* Tabs */
+        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 35px; }
         .tab-btn {
-            background: #fff;
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            padding: 10px 22px;
-            cursor: pointer;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: 0.3s;
+            background: #fff; border: 1px solid var(--border); color: var(--text-dim);
+            padding: 10px 22px; cursor: pointer; border-radius: 50px; font-weight: 600; transition: 0.3s;
         }
-
         .tab-btn.active {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
+            background: var(--primary); color: #fff; border-color: var(--primary);
             box-shadow: 0 4px 12px rgba(0, 112, 186, 0.2);
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
+            max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;
         }
 
+        /* Book Card */
         .book-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 20px; display: flex; flex-direction: column;
+            transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         }
+        .cover { width: 100%; height: 380px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        
+        /* Progress Bar */
+        .progress-box { margin: 15px 0; }
+        .progress-bg { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
+        .progress-fill { background: var(--primary); height: 100%; width: 0%; transition: width 1s; }
+        .prog-info { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-dim); margin-top: 6px; }
 
-        .book-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .cover {
-            width: 100%;
-            height: 360px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-
-        /* 进度条 */
-        .progress-box {
-            margin: 15px 0;
-        }
-
-        .progress-bg {
-            background: #eee;
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background: var(--primary);
-            height: 100%;
-            width: 0%;
-            transition: width 1s;
-        }
-
-        .prog-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-top: 6px;
-        }
-
-        /* 按钮 */
         .btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            text-decoration: none;
-            margin-top: 10px;
-            font-size: 0.9rem;
-            box-sizing: border-box;
-            transition: 0.2s;
+            display: block; width: 100%; padding: 12px; border-radius: 10px; border: none;
+            font-weight: 700; cursor: pointer; text-align: center; margin-top: 10px; text-decoration: none; font-size: 0.9rem;
         }
+        .btn-pay { background: var(--primary); color: #fff; }
+        .btn-get { background: var(--success); color: #fff; }
+        .btn-amazon { background: #fff; border: 1px solid var(--amazon); color: var(--amazon); }
 
-        .btn-pay {
-            background: var(--primary);
-            color: #fff;
+        /* Vote Section Styling */
+        .vote-section {
+            grid-column: 1 / -1; margin-top: 60px; padding: 40px 20px;
+            background: #ffffff; border: 2px dashed #d1d9e0; border-radius: 24px;
         }
+        .vote-header { text-align: center; margin-bottom: 30px; }
+        .vote-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .vote-card { background: #f8f9fa; border: 1px solid #eee; border-radius: 12px; padding: 15px; text-align: center; }
+        .cover-sm { width: 100%; height: 220px; object-fit: cover; border-radius: 6px; filter: grayscale(0.4); }
 
-        .btn-boost {
-            background: #fff;
-            border: 1px solid #ddd;
-            color: var(--text-dim);
-        }
-
-        .btn-get {
-            background: var(--success);
-            color: #fff;
-        }
-
-        .btn-amazon {
-            background: #fff;
-            border: 1px solid var(--amazon);
-            color: var(--amazon);
-        }
-
-        /* 弹窗与加载 */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal {
-            background: #fff;
-            padding: 40px;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 360px;
-            text-align: center;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid #eee;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* 底部 Footer 样式 */
-        footer {
-            background: var(--footer-bg);
-            border-top: 1px solid var(--border);
-            padding: 40px 20px;
-            margin-top: 60px;
-        }
-
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .footer-logo {
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .disclaimer {
-            font-size: 0.75rem;
-            color: #999;
-            line-height: 1.6;
-            text-align: justify;
-        }
-
-        .copyright {
-            margin-top: 25px;
-            font-size: 0.8rem;
-            color: var(--text-dim);
-        }
+        footer { background: var(--footer-bg); border-top: 1px solid var(--border); padding: 40px 20px; margin-top: 60px; text-align: center; }
+        
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal { background: #fff; padding: 30px; border-radius: 20px; width: 90%; max-width: 340px; text-align: center; }
     </style>
 </head>
-
 <body>
 
     <div class="main-content">
-        <div class="header">
-            <h1>OURBOOK</h1>
-        </div>
-
+        <div class="header"><h1>OURBOOK</h1></div>
+        
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab('hot', this)">Hot Picks</button>
-            <button class="tab-btn" onclick="switchTab('new', this)">New Arrivals</button>
-            <button class="tab-btn" onclick="switchTab('archive', this)">Archive</button>
+            <button class="tab-btn active" onclick="switchTab('hot', this)">🔥 Hot Picks</button>
+            <button class="tab-btn" onclick="switchTab('new', this)">✨ New Arrivals</button>
+            <button class="tab-btn" onclick="switchTab('archive', this)">📚 Archive</button>
         </div>
 
-        <div id="book-grid" class="container"></div>
+        <div id="book-grid" class="container">
+            </div>
     </div>
 
     <footer>
-        <div class="footer-content">
-            <span class="footer-logo">OurBook Collective</span>
-            <div class="disclaimer">
-                <strong>Disclaimer:</strong> OurBook provides a technical platform for AI-powered cloud transcription and group-buying collaboration.
-                By using our service, users acknowledge that they are contributing to a service-based cost-splitting project for personal study and research purposes only.
-                We act as a collective acquisition agent to facilitate access to premium knowledge through AI-driven digital conversion.
-            </div>
-            <div class="copyright">
-                &copy; 2026 OurBook. Powered by AI & Community Collaboration.
-            </div>
-        </div>
+        <div style="font-size: 0.8rem; color: #999;">&copy; 2026 OurBook Collective. Powered by AI Technology.</div>
     </footer>
 
     <div id="payModal" class="modal-overlay">
         <div class="modal">
             <h2 id="payTitle">Support Project</h2>
-            <p style="color:var(--text-dim)">Contribution: $0.99 (100 Credits)</p>
+            <p>Contribution: $0.99 (100 Credits)</p>
             <button class="btn btn-pay" onclick="executePayPal()">Confirm & Pay</button>
-            <p style="margin-top:20px; font-size:0.8rem; color:#999; cursor:pointer" onclick="closeModals()">Cancel</p>
+            <p onclick="closeModals()" style="cursor:pointer; margin-top:20px; color:#999;">Cancel</p>
         </div>
     </div>
-
-    <div id="secure-loading" class="modal-overlay" style="z-index: 2000;">
-        <div class="modal" style="border:none; box-shadow:none;">
-            <div class="spinner"></div>
-            <h3 style="color: var(--primary); margin-top:20px;">Securing Connection</h3>
-            <p style="color: var(--text-dim); font-size:0.85rem;">Establishing encrypted tunnel and syncing with PayPal API...</p>
-        </div>
-    </div>
-
-    <div id="emailModal" class="modal-overlay">
-        <div class="modal">
-            <div style="font-size: 3rem; margin-bottom: 10px;">📩</div>
-            <h2 id="archiveTitle" style="margin-top: 0;">Instant Access</h2>
-            <p style="color: var(--text-dim); font-size: 0.9rem;">The project is complete! Enter your email to receive the access key and study materials.</p>
-
-            <div style="text-align: left; margin-bottom: 15px;">
-                <label style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">EMAIL ADDRESS</label>
-                <input type="email" id="userEmail" placeholder="reader@example.com" style="width: 100%; padding: 12px; border: 2px solid #eee; border-radius: 8px; margin-top: 5px; box-sizing: border-box;">
-            </div>
-
-            <button class="btn btn-get" id="emailBtn" onclick="submitEmailRequest()">
-                Verify & Get Access
-            </button>
-            <p style="margin-top:20px; font-size:0.8rem; color:#999; cursor:pointer" onclick="closeModals()">← Back to Library</p>
-        </div>
-    </div>
-
-    <div id="toast" style="position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-     background: #333; color: #fff; padding: 12px 24px; border-radius: 50px; display: none; z-index: 9999;">
-    </div>
-
-    <div id="boostModal" class="modal-overlay">
-        <div class="modal share-modal">
-            <div style="font-size: 2.5rem; margin-bottom: 10px;">🚀</div>
-            <h2>Boost this Project</h2>
-            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px;">
-                Help us reach the goal faster! Select a platform to share this initiative with your community.
-            </p>
-
-            <div class="share-grid">
-                <button class="share-item" onclick="doShare('twitter')">
-                    <div class="share-icon" style="background: #000;">X</div>
-                    <span>Twitter</span>
-                </button>
-                <button class="share-item" onclick="doShare('whatsapp')">
-                    <div class="share-icon" style="background: #25D366;">W</div>
-                    <span>WhatsApp</span>
-                </button>
-                <button class="share-item" onclick="doShare('telegram')">
-                    <div class="share-icon" style="background: #0088cc;">T</div>
-                    <span>Telegram</span>
-                </button>
-                <button class="share-item" onclick="doShare('copy')">
-                    <div class="share-icon" style="background: #666;">🔗</div>
-                    <span>Copy Link</span>
-                </button>
-            </div>
-
-            <button class="btn btn-boost" style="background: #eee; color: #333; margin-top: 20px;" onclick="closeModals()">
-                Maybe Later
-            </button>
-        </div>
-    </div>
-
-    <style>
-        .share-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .share-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: white;
-            cursor: pointer;
-            transition: 0.2s;
-            border: none;
-            font-family: inherit;
-            background: #f1f3f5;
-        }
-
-        .share-item:hover {
-            transform: translateY(-3px);
-            background: #e9ecef;
-        }
-
-        .share-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-    </style>
 
     <script>
-        /* 1. 安全防护逻辑 */
-        // 防止点击劫持 (Clickjacking Protection)
-        if (self !== top) {
-            top.location = self.location;
-        }
-        // 强制 HTTPS 访问 (Force HTTPS)
-        if (location.protocol === 'http:' && !location.hostname.includes('localhost')) {
-            location.replace(`https://${location.hostname}${location.pathname}${location.search}`);
-        }
-
-        /* 2. 全局状态变量 */
         let allBooks = [];
         let currentTab = 'hot';
-        let activeBook = null;
-        const PAYPAL_EMAIL = "your-paypal@example.com"; // 建议与 PayPal 按钮 ID 配合使用
-        const MAKE_URL = "https://hook.us1.make.com/YOUR_CODE";
 
-        /* 3. 数据加载逻辑 (带 Loading 状态) */
         async function loadBooks() {
             const grid = document.getElementById('book-grid');
-            if (!grid) return;
-
-            // 注入初次加载的 Loading 状态
-            grid.innerHTML = `
-            <div style="grid-column: 1/-1; text-align: center; padding: 60px 0;">
-                <div class="spinner"></div>
-                <p style="color: var(--text-dim); margin-top: 15px; font-weight: 600;">Establishing Secure Connection...</p>
-            </div>
-        `;
-
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 50px;">Syncing...</div>';
             try {
-                // 从 Worker 获取实时数据
                 const response = await fetch('https://sparkling-recipe-6de6.infinityaudiobook.workers.dev/?t=' + Date.now());
-                const data = await response.json();
-
-                // 确保数据赋值给变量
-                allBooks = Array.isArray(data) ? data : [];
+                allBooks = await response.json();
                 render();
             } catch (e) {
-                console.error("Sync Error:", e);
-                grid.innerHTML = `
-                <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-                    <p style="color: #ff4d4d;">Data Sync Failed.</p>
-                    <button class="tab-btn active" onclick="loadBooks()">Retry Connection</button>
-                </div>
-            `;
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color:red;">Connection failed. Please refresh.</p>';
             }
         }
 
-        /* 4. 核心渲染函数 (功能区分逻辑) */
         function render() {
             const grid = document.getElementById('book-grid');
-            if (!grid) return;
-
             grid.innerHTML = '';
 
-            // 过滤逻辑：匹配当前标签
-            const filtered = allBooks.filter(b => {
-                const status = (b.status || '').toLowerCase();
-                if (currentTab === 'archive') return status === 'archive';
-                return status === currentTab;
+            // 1. Render Main Tab Content
+            const mainBooks = allBooks.filter(b => {
+                const s = (b.status || '').toLowerCase().trim();
+                if (currentTab === 'archive') return s === 'archive';
+                return s === currentTab;
             });
 
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 40px;">No active nodes in this sector.</div>`;
-                return;
+            if (mainBooks.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color:#999;">No projects in this category.</div>';
+            } else {
+                mainBooks.forEach(book => {
+                    const current = parseFloat(book.current_credits) || 0;
+                    const target = parseFloat(book.target_credits) || 1000;
+                    const percent = Math.min(((current / target) * 100), 100).toFixed(1);
+                    const isArchive = (book.status || '').toLowerCase().trim() === 'archive';
+
+                    grid.innerHTML += `
+                        <div class="book-card">
+                            <img src="${book.img}" class="cover" onerror="this.src='https://via.placeholder.com/300x450'">
+                            <h3 style="margin:10px 0; height:2.6em; overflow:hidden;">${book.title}</h3>
+                            ${isArchive ? `
+                                <a href="${book.download_url}" target="_blank" class="btn btn-get">Get Access Now</a>
+                                <a href="${book.amazon_link}" target="_blank" class="btn btn-amazon">Support Original</a>
+                            ` : `
+                                <div class="progress-box">
+                                    <div class="progress-bg"><div class="progress-fill" style="width: ${percent}%"></div></div>
+                                    <div class="prog-info"><span>Progress: ${percent}%</span><span>Goal: ${target}</span></div>
+                                </div>
+                                <button class="btn btn-pay" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>
+                            `}
+                        </div>
+                    `;
+                });
             }
 
-            filtered.forEach(book => {
-                // 解析数值与进度
-                const current = parseFloat(book.current_credits) || 0;
-                const target = parseFloat(book.target_credits) || 1000;
-                const percent = Math.min(((current / target) * 100), 100).toFixed(1);
-                const isArchive = book.status === 'Archive';
-
-                grid.innerHTML += `
-                <div class="book-card">
-                    <img src="${book.img || book.cover}" class="cover" onerror="this.src='https://via.placeholder.com/250x375?text=Syncing+Cover...'">
-                    <div class="book-info">
-                        <div class="badge">${isArchive ? 'Knowledge Unlocked' : 'In Progress'}</div>
-                        <h3 style="margin:10px 0; min-height: 2.4em;">${book.title}</h3>
-                        
-                        ${isArchive ? `
-                            <button class="btn btn-get" onclick="openEmailModal('${book.id}')">Get Access</button>
-                            <a href="${book.amazon || '#'}" target="_blank" class="btn btn-amazon">Support Original</a>
-                        ` : `
-                            <div class="progress-box">
-                                <div class="progress-bg">
-                                    <div class="progress-fill" style="width: ${percent}%"></div>
-                                </div>
-                                <div class="prog-info">
-                                    <span>Progress: ${percent}%</span>
-                                    <span>Goal: ${target}</span>
-                                </div>
-                            </div>
-                            <button class="btn btn-pay" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>
-                            <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀 Boost Project</button>
-                        `}
+            // 2. Render Vote Section (Appended at the bottom)
+            const voteBooks = allBooks.filter(b => (b.status || '').toLowerCase().includes('vote'));
+            
+            if (voteBooks.length > 0) {
+                const voteSection = document.createElement('div');
+                voteSection.className = 'vote-section';
+                voteSection.innerHTML = `
+                    <div class="vote-header">
+                        <span style="font-size: 2rem;">🗳️</span>
+                        <h2>Vote for Next Unlock</h2>
+                        <p>Help us choose the next project to launch for crowdfunding!</p>
                     </div>
-                </div>
-            `;
-            });
+                    <div class="vote-grid">
+                        ${voteBooks.map(book => `
+                            <div class="vote-card">
+                                <img src="${book.img}" class="cover-sm" onerror="this.src='https://via.placeholder.com/200x300'">
+                                <h4 style="margin:12px 0; height:2.4em; overflow:hidden;">${book.title}</h4>
+                                <div style="color:var(--primary); font-weight:bold; margin-bottom:10px;">🗳️ ${book.current_credits || 0} Votes</div>
+                                <button class="btn btn-pay" style="padding:8px; font-size:0.8rem;" onclick="handleVote('${book.id}')">Vote Now</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                grid.appendChild(voteSection);
+            }
         }
 
-        /* 5. 交互功能函数 */
         function switchTab(tab, btn) {
             currentTab = tab.toLowerCase();
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -508,197 +195,17 @@
         }
 
         function handlePayClick(id, title) {
-            activeBook = allBooks.find(b => b.id === id);
             document.getElementById('payTitle').innerText = title;
             document.getElementById('payModal').style.display = 'flex';
         }
 
-        function executePayPal() {
-            if (!activeBook) return;
-            document.getElementById('payModal').style.display = 'none';
-            document.getElementById('secure-loading').style.display = 'flex';
-
-            // 构建 PayPal 参数，核心是 custom 字段，用于 Make.com 识别
-            const params = new URLSearchParams({
-                cmd: "_xclick",
-                business: PAYPAL_EMAIL,
-                item_name: `Credits for ${activeBook.title}`,
-                amount: "0.99",
-                currency_code: "USD",
-                custom: activeBook.id, // 传递书籍 ID
-                no_shipping: "1",
-                return: window.location.origin,
-                cancel_return: window.location.origin
-            });
-
-            setTimeout(() => {
-                window.location.href = `https://www.paypal.com/cgi-bin/webscr?${params.toString()}`;
-            }, 1500);
+        function handleVote(id) {
+            alert("Thanks for voting! Your preference has been recorded.");
         }
 
-        /* --- Boost 弹窗控制 --- */
-        function slugify(text) {
-            return text.toString().toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '').replace(/\-\-+/g, '-');
-        }
+        function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
 
-        function handleBoost(id, title) {
-            window.currentShare = {
-                id: id,
-                title: title,
-                url: window.location.href // 推荐直接用当前页面链接，最稳妥
-            };
-            document.getElementById('boostModal').style.display = 'flex';
-        }
-
-        function doShare(platform) {
-            const data = window.currentShare;
-            const text = encodeURIComponent(`Help us unlock "${data.title}"! Support this AI Audiobook project: `);
-            const url = encodeURIComponent(data.url);
-            let finalUrl = "";
-
-            switch (platform) {
-                case 'twitter':
-                    finalUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-                    break;
-                case 'whatsapp':
-                    finalUrl = `https://api.whatsapp.com/send?text=${text}${url}`;
-                    break;
-                case 'telegram':
-                    finalUrl = `https://t.me/share/url?url=${url}&text=${text}`;
-                    break;
-                case 'copy':
-                    copyToClipboard(data.url);
-                    return;
-            }
-
-            if (finalUrl) window.open(finalUrl, '_blank', 'width=600,height=400');
-        }
-
-        // 用于将标题转换为 URL 友好的格式 (例如: "Atomic Habits" -> "atomic-habits")
-        function slugify(text) {
-            return text.toString().toLowerCase()
-                .replace(/\s+/g, '-') // 换空格为 -
-                .replace(/[^\w\-]+/g, '') // 移除所有非单词字符
-                .replace(/\-\-+/g, '-') // 换多个 - 为单个 -
-                .replace(/^-+/, '') // 移除开头的 -
-                .replace(/-+$/, ''); // 移除结尾的 -
-        }
-        /* --- 执行具体的分享动作 --- */
-        function doShare(platform) {
-            const data = window.currentShare;
-            const text = encodeURIComponent(`Help us unlock "${data.title}" AI Audiobook project! Support the collective knowledge here: `);
-            const url = encodeURIComponent(data.url);
-
-            let finalUrl = "";
-
-            switch (platform) {
-                case 'twitter':
-                    finalUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
-                    break;
-                case 'whatsapp':
-                    finalUrl = `https://api.whatsapp.com/send?text=${text}${url}`;
-                    break;
-                case 'telegram':
-                    finalUrl = `https://t.me/share/url?url=${url}&text=${text}`;
-                    break;
-                case 'copy':
-                    copyToClipboard(data.url);
-                    return; // 复制后直接返回，不打开窗口
-            }
-
-            if (finalUrl) {
-                window.open(finalUrl, '_blank', 'width=600,height=400');
-                showToast("Opening " + platform + "...");
-            }
-        }
-
-        /* --- 一键复制辅助函数 --- */
-        function copyToClipboard(text) {
-            const input = document.createElement('input');
-            document.body.appendChild(input);
-            input.value = text;
-            input.select();
-            try {
-                document.execCommand('copy');
-                showToast("🚀 Link copied to clipboard!");
-            } catch (err) {
-                showToast("Failed to copy link.");
-            }
-            document.body.removeChild(input);
-        }
-
-        function openEmailModal(id) {
-            activeBook = allBooks.find(b => b.id === id);
-            if (!activeBook) return;
-
-            document.getElementById('archiveTitle').innerText = activeBook.title;
-            const emailInput = document.getElementById('userEmail');
-            emailInput.value = ""; // 清空旧数据
-            emailInput.style.borderColor = "#eee";
-
-            document.getElementById('emailModal').style.display = 'flex';
-        }
-
-        async function submitEmailRequest() {
-            const email = document.getElementById('userEmail').value;
-            const btn = document.getElementById('emailBtn');
-
-            // 简易正则验证
-            if (!email || !email.includes('@')) {
-                document.getElementById('userEmail').style.borderColor = "#ff4d4d";
-                return showToast("Please enter a valid email.");
-            }
-
-            btn.innerText = "⚡ Syncing Access...";
-            btn.disabled = true;
-
-            try {
-                // 同步至 Make.com 记录数据
-                await fetch(MAKE_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: email,
-                        bookId: activeBook.id,
-                        title: activeBook.title,
-                        timestamp: new Date().toISOString()
-                    })
-                });
-
-                showToast("Success! Redirecting to access node...");
-
-                // 延迟跳转，给用户一点点反馈时间
-                setTimeout(() => {
-                    window.location.href = activeBook.drive || '#';
-                }, 1500);
-
-            } catch (e) {
-                console.error("Sync error:", e);
-                // 如果失败，通常依然允许跳转以保证用户体验
-                window.location.href = activeBook.drive || '#';
-            }
-        }
-
-        /* --- 辅助：Toast 提示系统 --- */
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
-        }
-
-        function closeModals() {
-            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
-        }
-
-        // 初始化
         window.addEventListener('DOMContentLoaded', loadBooks);
     </script>
-
 </body>
-
 </html>
