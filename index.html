@@ -136,102 +136,96 @@
         </div>
     </div>
 
-    <script>
-        const PAYPAL_EMAIL = "your-paypal@example.com";
-        const MAKE_URL = "https://hook.us1.make.com/YOUR_CODE";
+ <script>
+    let allBooks = []; // 存储从服务器获取的所有书籍
+    const container = document.getElementById('book-container');
+    let currentBookId = '';
 
-        let books = [
-            { id: 'b001', title: 'The Psychology of Money', status: 'Hot', progress: 78, cover: 'https://images-na.ssl-images-amazon.com/images/I/71TRu7S+mZL.jpg', amazon: '#', drive: '#' },
-            { id: 'b002', title: 'Atomic Habits', status: 'Archive', progress: 100, cover: 'https://images-na.ssl-images-amazon.com/images/I/91bYsX41DVL.jpg', amazon: 'https://amazon.com', drive: 'https://drive.google.com' }
-        ];
+    // 1. 从 Worker 获取实时数据
+    async function loadBooks() {
+        try {
+            // 添加时间戳防止浏览器缓存 JSON 结果
+            const response = await fetch('https://sparkling-recipe-6de6.infinityaudiobook.workers.dev/?t=' + Date.now());
+            allBooks = await response.json();
+            render(); 
+        } catch (e) {
+            console.error("Fetch error:", e);
+            container.innerHTML = `<div style="grid-column: 1/-1; text-align: center;">Connection Failed. Please refresh.</div>`;
+        }
+    }
 
-        let currentTab = 'hot';
-        let activeBook = null;
+    // 2. 渲染页面内容
+    function render() {
+        container.innerHTML = '';
+        
+        allBooks.forEach(book => {
+            // --- 核心修复：匹配 Google Sheet 里的真实列名 ---
+            const current = parseFloat(book.current_credits) || 0;
+            const target = parseFloat(book.target_credits) || 1000;
+            const percent = ((current / target) * 100).toFixed(1);
+            // ------------------------------------------
 
-function render() {
-    container.innerHTML = '';
-    books.forEach(book => {
-        // --- 核心修复：匹配 Google Sheet 里的真实列名 ---
-        const current = parseFloat(book.current_credits) || 0;
-        const target = parseFloat(book.target_credits) || 1000;
-        const percent = ((current / target) * 100).toFixed(1);
-        // ------------------------------------------
+            const isArchive = book.status === 'Archive';
 
-        container.innerHTML += `
-            <div class="book-card" id="card-${book.id}">
-                <img src="${book.img}" class="cover">
-                <div class="book-info">
-                    <div class="badge">${book.status}</div>
-                    <h3>${book.title}</h3>
-                    <div class="progress-wrapper">
-                        <div class="progress-bar" id="bar-${book.id}" style="width: ${percent}%"></div>
-                    </div>
-                    <div class="stats">
-                        <span><b id="txt-${book.id}">${percent}%</b> Complete</span>
-                        <span>Goal: ${target}</span>
-                    </div>
-                    <div class="actions">
-                        ${book.status === 'Archive' ? 
-                            `<a href="${book.download_url}" class="btn btn-support" style="text-decoration:none; color:#000;">Get Access</a>` : 
-                            `<button class="btn btn-support" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>`
-                        }
-                        <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀 Boost</button>
+            container.innerHTML += `
+                <div class="book-card" id="card-${book.id}">
+                    <img src="${book.img}" class="cover">
+                    <div class="book-info">
+                        <div class="badge">${isArchive ? 'Unlocked' : 'Technical Coordination Active'}</div>
+                        <h3>${book.title}</h3>
+                        <div class="progress-wrapper">
+                            <div class="progress-bar" id="bar-${book.id}" style="width: ${percent}%"></div>
+                        </div>
+                        <div class="stats">
+                            <span><b id="txt-${book.id}">${percent}%</b> Complete</span>
+                            <span>Target: ${target}</span>
+                        </div>
+                        <div class="actions">
+                            ${isArchive ? 
+                                `<a href="${book.download_url}" target="_blank" class="btn btn-support" style="text-decoration:none; color:#000; display:flex; align-items:center; justify-content:center;">Get Now</a>` : 
+                                `<button class="btn btn-support" onclick="handlePayClick('${book.id}', '${book.title}')">Support $0.99</button>`
+                            }
+                            <button class="btn btn-boost" onclick="handleBoost('${book.id}', '${book.title}')">🚀 Boost</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-    });
-}
+            `;
+        });
+    }
 
-        function switchTab(tab, btn) {
-            currentTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            render();
-        }
+    // 3. 支付弹窗处理
+    function handlePayClick(id, title) {
+        currentBookId = id;
+        document.getElementById('modalBookTitle').innerText = title;
+        document.getElementById('tos-check').checked = false;
+        document.getElementById('final-support-btn').disabled = true;
+        document.getElementById('step-confirm').style.display = 'block';
+        document.getElementById('step-loading').style.display = 'none';
+        document.getElementById('paymentModal').style.display = 'flex';
+    }
 
-        function openPayModal(id) {
-            activeBook = books.find(b => b.id === id);
-            document.getElementById('payTitle').innerText = activeBook.title;
-            document.getElementById('payModal').style.display = 'flex';
-        }
+    function toggleSupportBtn() {
+        const isChecked = document.getElementById('tos-check').checked;
+        document.getElementById('final-support-btn').disabled = !isChecked;
+    }
 
-        function executePayPal() {
-            document.getElementById('payModal').style.display = 'none';
-            document.getElementById('secure-loading').style.display = 'flex';
-            const params = new URLSearchParams({
-                cmd: "_xclick", business: PAYPAL_EMAIL,
-                item_name: `Digital Credits for ${activeBook.title}`,
-                amount: "0.99", currency_code: "USD",
-                custom: activeBook.id, no_shipping: "1",
-                return: window.location.origin, cancel_return: window.location.origin
-            });
-            setTimeout(() => { window.location.href = `https://www.paypal.com/cgi-bin/webscr?${params.toString()}`; }, 1500);
-        }
+    // 4. 跳转至 PayPal (带上自定义 ID)
+    function startSecureTransition() {
+        document.getElementById('step-confirm').style.display = 'none';
+        document.getElementById('step-loading').style.display = 'block';
+        
+        // 替换为你真实的 PayPal 按钮 ID
+        const paypalButtonId = "你的ID"; 
+        const finalUrl = `https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=${paypalButtonId}&custom=${currentBookId}`;
 
-        function openEmailModal(id) {
-            activeBook = books.find(b => b.id === id);
-            document.getElementById('archiveTitle').innerText = activeBook.title;
-            document.getElementById('emailModal').style.display = 'flex';
-        }
+        setTimeout(() => { window.location.href = finalUrl; }, 1500);
+    }
 
-        async function submitEmailRequest() {
-            const email = document.getElementById('userEmail').value;
-            if(!email.includes('@')) return alert('Valid email required.');
-            document.getElementById('emailBtn').innerText = "Syncing...";
-            try {
-                await fetch(MAKE_URL, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email, bookId: activeBook.id, title: activeBook.title })
-                });
-                window.location.href = activeBook.drive;
-            } catch (e) { window.location.href = activeBook.drive; }
-        }
+    function closeModal() { document.getElementById('paymentModal').style.display = 'none'; }
+    window.onclick = (e) => { if(e.target.className == 'modal-overlay') closeModal(); }
 
-        function closeModals() { document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); }
-        window.onclick = (e) => { if(e.target.className === 'modal-overlay') closeModals(); }
-
-        render();
-    </script>
+    // 初始加载
+    loadBooks();
+</script>
 </body>
 </html>
