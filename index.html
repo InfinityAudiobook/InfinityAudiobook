@@ -2,6 +2,17 @@
 <html lang="en">
 
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OurBook | AI-Powered Collective Knowledge</title>
@@ -249,45 +260,64 @@
             color: var(--text-dim);
         }
     </style>
-  <style>
-    /* 投票区大背景 */
-    .vote-section-container {
-        max-width: 1200px;
-        margin: 60px auto 40px;
-        padding: 40px 20px;
-        background: #ffffff;
-        border: 2px dashed #d1d9e0;
-        border-radius: 24px;
-    }
+    <style>
+        /* 投票区大背景 */
+        .vote-section-container {
+            max-width: 1200px;
+            margin: 60px auto 40px;
+            padding: 40px 20px;
+            background: #ffffff;
+            border: 2px dashed #d1d9e0;
+            border-radius: 24px;
+        }
 
-    .vote-header { text-align: center; margin-bottom: 30px; }
-    .vote-header h2 { color: var(--primary); margin: 10px 0; }
-    .vote-header p { color: var(--text-dim); font-size: 0.9rem; }
+        .vote-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    /* 投票小卡片微调：减小高度，突出票数 */
-    .vote-card {
-        background: #f8f9fa;
-        border: 1px solid #eee;
-        border-radius: 12px;
-        padding: 15px;
-        text-align: center;
-        transition: 0.3s;
-    }
-    .vote-card:hover { transform: scale(1.02); border-color: var(--primary); }
-    .vote-card .cover-sm {
-        width: 100%;
-        height: 200px; /* 比标准卡片矮一点 */
-        object-fit: cover;
-        border-radius: 6px;
-        filter: grayscale(0.3); /* 稍微变灰，暗示还未启动 */
-    }
-    .vote-stats {
-        margin: 12px 0;
-        font-weight: bold;
-        color: var(--primary);
-        font-size: 1.1rem;
-    }
-</style>
+        .vote-header h2 {
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .vote-header p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* 投票小卡片微调：减小高度，突出票数 */
+        .vote-card {
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .vote-card:hover {
+            transform: scale(1.02);
+            border-color: var(--primary);
+        }
+
+        .vote-card .cover-sm {
+            width: 100%;
+            height: 200px;
+            /* 比标准卡片矮一点 */
+            object-fit: cover;
+            border-radius: 6px;
+            filter: grayscale(0.3);
+            /* 稍微变灰，暗示还未启动 */
+        }
+
+        .vote-stats {
+            margin: 12px 0;
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -304,15 +334,15 @@
         </div>
 
         <div id="book-grid" class="container"></div>
-      <div class="vote-section-container">
-    <div class="vote-header">
-        <span class="vote-icon">🗳️</span>
-        <h2>Vote for the Next Unlock</h2>
-        <p>The books below are in our "Evaluation Pool". The most voted one will start crowdfunding next!</p>
-    </div>
-    <div id="vote-grid" class="container" style="margin-top: 20px;">
+        <div class="vote-section-container">
+            <div class="vote-header">
+                <span class="vote-icon">🗳️</span>
+                <h2>Vote for the Next Unlock</h2>
+                <p>The books below are in our "Evaluation Pool". The most voted one will start crowdfunding next!</p>
+            </div>
+            <div id="vote-grid" class="container" style="margin-top: 20px;">
+            </div>
         </div>
-</div>
     </div>
 
     <footer>
@@ -493,7 +523,7 @@
         }
 
         /* 4. 核心渲染函数 (功能区分逻辑) */
-    /* 4. 核心渲染函数 (已修复投票栏逻辑) */
+        /* 4. 核心渲染函数 (已修复投票栏逻辑) */
         function render() {
             const grid = document.getElementById('book-grid');
             const voteGrid = document.getElementById('vote-grid');
@@ -561,17 +591,19 @@
 
         // 修复后的投票处理函数
         async function handleVote(id) {
-            if(localStorage.getItem('voted_' + id)) {
+            if (localStorage.getItem('voted_' + id)) {
                 return showToast("You've already voted for this book!");
             }
-            
+
             showToast("Recording vote...");
             try {
                 // 确保此 URL 已替换为你 Make.com 的实际 Webhook 地址
                 const response = await fetch('你的_VOTE_WEBHOOK_URL', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
                         bookId: id,
                         action: 'vote',
                         timestamp: new Date().toISOString()
@@ -582,7 +614,7 @@
                     localStorage.setItem('voted_' + id, 'true');
                     showToast("🚀 Vote recorded! Thank you.");
                     // 延迟一秒重新加载数据，以便显示更新后的票数
-                    setTimeout(loadBooks, 1000); 
+                    setTimeout(loadBooks, 1000);
                 } else {
                     throw new Error();
                 }
