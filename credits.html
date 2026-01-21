@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credits Protocol | OurBook Collective</title>
+    <link rel="shortcut icon" href="/OurBook_favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/OurBook_favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --primary: #0070ba;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text-main: #222222;
+            --text-dim: #666666;
+            --success: #28a745;
+            --border: #e1e4e8;
+            --footer-bg: #ffffff;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--card);
+            padding: 1.2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+        }
+
+        h2 { font-size: 1.5rem; margin-top: 0; margin-bottom: 1.5rem; }
+
+        .section-title {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title::before {
+            content: "//";
+            margin-right: 8px;
+            opacity: 0.5;
+        }
+
+        .rule-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .rule-item {
+            padding: 1.2rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            text-align: center;
+            background: #fafafa;
+        }
+
+        .rule-item strong {
+            display: block;
+            font-size: 1.4rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .rule-item span {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .highlight-box {
+            background: #f0f7ff;
+            border-left: 4px solid var(--primary);
+            padding: 1.2rem;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            color: #334455;
+        }
+
+        ul { padding-left: 1.2rem; margin: 0; }
+        li { margin-bottom: 1rem; color: var(--text-dim); font-size: 0.95rem; }
+        li strong { color: var(--text-main); }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* 修正后的 Footer 样式 */
+        .footer {
+            background: var(--footer-bg);
+            padding: 3rem 1rem;
+            border-top: 1px solid var(--border);
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-logo {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            letter-spacing: 1px;
+        }
+
+        .disclaimer {
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .copyright {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 600px) {
+            .rule-grid { grid-template-columns: 1fr; }
+            .card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="header">
+        <h1>System Status: Credits Protocol</h1>
+    </header>
+
+    <main class="container">
+        <div class="card">
+            <h2>Understanding OurBook Credits</h2>
+            <p style="color: var(--text-dim);">To ensure the sustainable distribution of high-quality AI-powered knowledge, we utilize a "Digital Credits" system for all community contributions.</p>
+
+            <div class="section-title">The 1-100-1000 Rule</div>
+            <div class="rule-grid">
+                <div class="rule-item">
+                    <strong>$0.99</strong>
+                    <span>Contribution</span>
+                </div>
+                <div class="rule-item">
+                    <strong>100</strong>
+                    <span>Credits Issued</span>
+                </div>
+                <div class="rule-item">
+                    <strong>1000</strong>
+                    <span>Unlock Goal</span>
+                </div>
+            </div>
+
+            <div class="section-title">Why we use Credits?</div>
+            <ul>
+                <li><strong>Privacy & Compliance:</strong> Transactions appear as "Digital Credits" on your statement. No specific titles are recorded, protecting your privacy and complying with global payment policies.</li>
+                <li><strong>Collective Sharing:</strong> By contributing 100 credits each, a group of 10 pioneers can unlock premium content that would otherwise be costly for an individual.</li>
+                <li><strong>Early Access:</strong> As a contributor, you don't need to wait for the 100% goal. You will receive an instant "Priority Unlock" link via email immediately after your contribution.</li>
+            </ul>
+
+            <div class="highlight-box">
+                <strong>// System Note:</strong><br>
+                Credits represent your support for OurBook’s AI computing and digital distribution research. All contributions are final and immediately applied to project momentum.
+            </div>
+
+            <a href="index.html" class="back-link">← Return to Knowledge Library</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <span class="footer-logo">OurBook Collective</span>
+            <div class="disclaimer">
+                <strong>Disclaimer:</strong> OurBook provides a technical platform for AI-powered cloud transcription and group-buying collaboration. 
+                By using our service, users acknowledge that they are contributing to a service-based cost-splitting project for personal study and research purposes only. 
+                We act as a collective acquisition agent to facilitate access to premium knowledge through AI-driven digital conversion.
+            </div>
+            <div class="copyright">
+                &copy; 2026 OurBook. Powered by AI & Community Collaboration.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
