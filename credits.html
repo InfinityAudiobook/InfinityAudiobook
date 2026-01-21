@@ -31,24 +31,79 @@
             min-height: 100vh;
         }
 
-        .header {
+        /* --- 导航栏样式 --- */
+        .navbar {
             background: var(--card);
-            padding: 1.2rem;
+            border-bottom: 1px solid var(--border);
+            padding: 0.8rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .nav-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 2px;
+        }
+
+        /* --- 页面二级标题样式 --- */
+        .page-header {
+            background: #fff;
+            padding: 2rem 1rem;
             text-align: center;
             border-bottom: 1px solid var(--border);
         }
 
-        .header h1 {
+        .page-header h1 {
             margin: 0;
             font-size: 1.2rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             font-weight: 600;
+            color: var(--text-dim);
         }
 
         .container {
             max-width: 650px;
-            margin: 3rem auto;
+            margin: 2rem auto;
             padding: 0 1.5rem;
             flex: 1;
         }
@@ -131,60 +186,7 @@
             font-weight: 500;
         }
 
-        /* --- 新增导航栏样式 --- */
-        .navbar {
-            background: var(--card);
-            border-bottom: 1px solid var(--border);
-            padding: 0.8rem 1.5rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .nav-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .nav-logo {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--text-main);
-            text-decoration: none;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-dim);
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: color 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-links a.active {
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 2px;
-        }
-
-        /* 修正后的 Footer 样式 */
+        /* Footer 样式 */
         .footer {
             background: var(--footer-bg);
             padding: 3rem 1rem;
@@ -223,13 +225,24 @@
         @media (max-width: 600px) {
             .rule-grid { grid-template-columns: 1fr; }
             .card { padding: 1.5rem; }
+            .nav-links { gap: 1rem; }
         }
     </style>
 </head>
 
 <body>
 
-    <header class="header">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">OurBook</a>
+            <div class="nav-links">
+                <a href="index.html">Library</a>
+                <a href="credits.html" class="active">Credits</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
         <h1>System Status: Credits Protocol</h1>
     </header>
 
